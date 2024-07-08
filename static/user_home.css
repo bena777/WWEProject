@@ -127,3 +127,9 @@ button:hover {
      height: 300px;
      overflow-y: auto;
 }
+.histogram{
+    position: absolute;
+    left: 350px;
+    top: 400px;
+    height: 300px;
+}

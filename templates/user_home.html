@@ -47,6 +47,7 @@
             <h3>Median: {{ median }}</h3>
             <h3>Total: {{ total_matches }}</h3>
             <h3>Standard Deviation: {{ std.__round__(2) }}</h3>
+            <img class="histogram" src="{{ url_for('static', filename='plots/plot_' + id + '.png') }}" alt="Histogram Plot">
         </section>
         <button class="input-btn" onclick="location.href='{{ url_for('input_new_match') }}'">Input New Match</button>
         <button class="dist-btn" onclick="location.href='{{ url_for('view_dist') }}'">See By Superstar</button>

@@ -7,39 +7,19 @@ body, h1, h2, h3, p, ul, li {
 /* Basic styling */
 body {
     font-family: Arial, sans-serif;
+    line-height: 1.6;
     background-color: #f2f2f2;
+    margin: 0;
     padding: 20px;
-}
-
-/* Header and Navigation styling */
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-}
-
-nav ul {
-    list-style-type: none;
-}
-
-nav ul li {
-    display: inline-block;
-    margin-right: 20px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px;
 }
 
 /* Table styling */
 table#ratings-data {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 table#ratings-data th,
@@ -58,6 +38,24 @@ table#ratings-data tbody tr:hover {
     background-color: #f1f1f1;
 }
 
+table#ratings-data tbody td {
+    vertical-align: middle;
+}
+
+/* Sortable table styles (optional, if you have JS for sorting) */
+.sortable th {
+    cursor: pointer;
+}
+
+.sortable th:hover {
+    background-color: #555;
+}
+
+.sortable th,
+.sortable td {
+    white-space: nowrap;
+}
+
 /* Responsive table */
 @media screen and (max-width: 600px) {
     table#ratings-data {
@@ -66,33 +64,18 @@ table#ratings-data tbody tr:hover {
     }
 }
 
-/* Button styling */
-.see-all, .input-btn, .dist-btn {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
+/* Navigation styling */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
     display: inline-block;
-    font-size: 16px;
-    margin: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition-duration: 0.4s;
+    margin-right: 20px;
 }
 
-.see-all:hover, .input-btn:hover, .dist-btn:hover {
-    background-color: #45a049;
-}
-
-/* Footer styling */
-footer {
-    background-color: #333;
+nav ul li a {
     color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+    text-decoration: none;
 }

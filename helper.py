@@ -7,7 +7,8 @@ import warnings
 import re
 warnings.simplefilter(action="ignore",category=FutureWarning)
 import matplotlib.pyplot as plt
-
+import matplotlib
+matplotlib.use("Agg")
 
 def get_recent_matches(date):
         cont = True
@@ -84,6 +85,14 @@ def make_user_distribution_pie(data, id):
     plt.savefig(f"static/plots/plot_{id}.png", bbox_inches='tight')
 
 # make a distribution that shows histogram of how ALL matches are ranked
+def make_user_distribution_hist(id):
+    matches = Ratings.query.filter_by(user_index=id).all()
+    ratings = [x.rating for x in matches]
+    plt.xlabel("Rating")
+    plt.ylabel("# of Times")
+    plt.title("Rating Distribution")
+    plt.hist(ratings, bins=20, color='#86bf91')
+    plt.savefig(f"static/plots/plot_{id}")
 
 
 

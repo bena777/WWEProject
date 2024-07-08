@@ -65,7 +65,7 @@ login_manager.login_view = "login"
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-from helper import get_recent_matches, get_user_distribution
+from helper import get_recent_matches, get_user_distribution, make_user_distribution_hist
 @app.route("/")
 def home():
     last_date = Matches.query.order_by(Matches.date.desc()).limit(1).all()[0].date
@@ -132,6 +132,7 @@ def input_new_match():
         match.rating = request.form['rating']
         match.match_index = request.form['selected_match_id']
         match.user_index = current_user.id
+        dist = get_user_distribution(current_user.id)
         if int(match.match_index) not in [x.match_index for x in Ratings.query.filter_by(user_index=session["id"]).all()]:
             db.session.add(match)
             db.session.commit()
@@ -141,7 +142,9 @@ def input_new_match():
             matches.append(Matches.query.get(i.match_index))
         matches = reversed(matches)
         q = reversed(q)
-        return render_template("user_home.html",username=session["username"],matches=zip(matches,q))
+        total = sum([dist[x][0] for x in dist])
+        sorted_ratings = sorted([x.rating for x in q])
+        return redirect(url_for('user_home'))
     else:
         return render_template("input.html")
 
@@ -156,6 +159,7 @@ def user_home():
     if request.method=="POST":
         return render_template("input.html")
     else:
+        plot_url = make_user_distribution_hist(current_user.id)
         dist = get_user_distribution(current_user.id)
         user = User.query.filter_by(username=session["username"]).first()
         q = [x for x in Ratings.query.filter_by(user_index=user.id)]
@@ -164,10 +168,11 @@ def user_home():
             matches.append(Matches.query.get(i.match_index))
         total = sum([dist[x][0] for x in dist])
         sorted_ratings = sorted([x.rating for x in q])
-        print(dist)
+        matches,q = reversed(matches),reversed(q)
         return render_template("user_home.html", username=session["username"], id = str(current_user.id),
                                matches=zip(matches, q),dist=dist,total=total, mean=sum([dist[x][1] for x in dist])/total,
-                               median = np.median(sorted_ratings), std = np.std(sorted_ratings),total_matches=len(sorted_ratings))
+                               median = np.median(sorted_ratings), std = np.std(sorted_ratings),total_matches=len(sorted_ratings),
+                               plot = plot_url)
 @app.route("/superstar_dist",methods=['POST','GET'])
 def view_dist():
     if request.method == 'POST':
