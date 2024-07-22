@@ -13,7 +13,7 @@
         <nav>
             <h1>WrestleRate</h1>
             <ul>
-                <li><a href="#">About</a></li>
+                <li><a onclick="window.location.href='{{ url_for('about') }}'">About</a></li>
                 <li><a href="#">Contact</a></li>
                 <li><button onclick="window.location.href='{{ url_for('login') }}'" class="login-btn">Login</button></li>
                 <li><button onclick="window.location.href='{{ url_for('register') }}'" class="register-btn">Register</button></li>
