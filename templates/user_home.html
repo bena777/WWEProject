@@ -23,6 +23,7 @@
             <table id="match-data" class="sortable">
                 <thead>
                     <tr>
+                        <th>Promotion</th>
                         <th>Match</th>
                         <th>Event</th>
                         <th>Date</th>
@@ -32,6 +33,7 @@
                 <tbody>
                     {% for i,j in matches %}
                     <tr>
+                        <td>{{ i.promotion }}</td>
                         <td>{{ i.match }}</td>
                         <td>{{ i.event }}</td>
                         <td>{{ i.date }}</td>

@@ -10,44 +10,46 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
 
-def get_recent_matches(date):
-        cont = True
-        url = f"https://www.cagematch.net//?id=8&nr=1&page=7"
-        headers = {"Accept-Encoding": "deflate"}
-        soup = BeautifulSoup(requests.get(url, headers=headers).content, "html.parser")
-        links = [
-            "https://www.cagematch.net/" + a["href"] for a in soup.select(".TCol a")
-        ]
-        matches = []
-        for u in links:
-            if cont:
-                soup = BeautifulSoup(
-                    requests.get(u, headers=headers).content, "html.parser"
-                )
-                match = {}
-                for info in soup.select(".InformationBoxRow"):
-                    match[info.select_one(".InformationBoxTitle").text.strip()] = info.select_one(".InformationBoxContents").text.strip()
-                matches.append(match)
-                matches[len(matches)-1]["Event:"] = match["Event:"].split("(")[0]
-                matches[len(matches)-1]["Date:"] = match["Date:"][6:10]+"-"+match["Date:"][3:5]+"-"+match["Date:"][0:2]
-                if time.strptime(matches[len(matches)-1]["Date:"],"%Y-%m-%d") <= time.strptime(date,"%Y-%m-%d"):
-                    cont = False
+def get_recent_matches(date,nrs):
         new_matches = []
-        for i in matches:
-            match = i["Fixture:"].strip()
-            participants = []
-            for j in re.split(r'vs. |& |,',match):
-                participants.append(str(j.strip()))
-            if len(participants) <= 8:
-                query = [match, i["Date:"].strip(), i["Promotion:"].strip(),i["Match type:"].strip(), i["Event:"].strip()]
-                while len(participants) < 8:
-                    participants.append("n/a")
-                for z in participants:
-                    query.append(z)
-                new_matches.append(query)
+        for i in nrs:
+            cont = True
+            url = f"https://www.cagematch.net//?id=8&nr={i}&page=7"
+            headers = {"Accept-Encoding": "deflate"}
+            soup = BeautifulSoup(requests.get(url, headers=headers).content, "html.parser")
+            links = [
+                "https://www.cagematch.net/" + a["href"] for a in soup.select(".TCol a")
+            ]
+            matches = []
+            for u in links:
+                if cont:
+                    soup = BeautifulSoup(
+                        requests.get(u, headers=headers).content, "html.parser"
+                    )
+                    match = {}
+                    for info in soup.select(".InformationBoxRow"):
+                        match[info.select_one(".InformationBoxTitle").text.strip()] = info.select_one(".InformationBoxContents").text.strip()
+                    matches.append(match)
+                    matches[len(matches)-1]["Event:"] = match["Event:"].split("(")[0]
+                    matches[len(matches)-1]["Date:"] = match["Date:"][6:10]+"-"+match["Date:"][3:5]+"-"+match["Date:"][0:2]
+                    if time.strptime(matches[len(matches)-1]["Date:"],"%Y-%m-%d") <= time.strptime(date,"%Y-%m-%d"):
+                        cont = False
+            for j in matches:
+                match = j["Fixture:"].strip()
+                participants = []
+                for x in re.split(r'vs. |& |,',match):
+                    participants.append(str(x.strip()))
+                if len(participants) <= 8:
+                    query = [match, j["Date:"].strip(), j["Promotion:"].strip(),j["Match type:"].strip(), j["Event:"].strip()]
+                    while len(participants) < 8:
+                        participants.append("n/a")
+                    for z in participants:
+                        query.append(z)
+                    new_matches.append(query)
         return new_matches
 
 def get_user_distribution(id):
+
     query_result = db.session.query(Ratings, Matches).\
         join(Matches, Ratings.match_index == Matches.id).\
         filter(Ratings.user_index == id).all()
@@ -96,50 +98,53 @@ def make_user_distribution_hist(id):
 
 
 
-# for scrapping the match data
-# def get_matches():
-#      n = 10100
-#      df = pd.DataFrame()
-#      while n<=13100:
-#          url = f"https://www.cagematch.net//?id=8&nr=1&page=7&s={n}"
-#          headers = {"Accept-Encoding": "deflate"}
-#          soup = BeautifulSoup(requests.get(url, headers=headers).content, "html.parser")
-#
-#          links = [
-#              "https://www.cagematch.net/" + a["href"] for a in soup.select(".TCol a")
-#         ]
-#          matches = []
-#          for u in links:
-#              soup = BeautifulSoup(
-#                  requests.get(u, headers=headers).content, "html.parser"
-#              )
-#              match = {}
-#              for info in soup.select(".InformationBoxRow"):
-#                  match[info.select_one(".InformationBoxTitle").text.strip()] = info.select_one(".InformationBoxContents").text.strip()
-#              matches.append(match)
-#              print(match)
-#          for i in matches:
-#              i["Event:"] = i["Event:"].split("(")[0]
-#              i["Date:"] = i["Date:"][3:5]+"/"+i["Date:"][0:2]+"/"+i["Date:"][6:10]
-#          df = pd.concat([df,pd.DataFrame(matches)],ignore_index=True)
-#          n+=100
-#          df.to_csv("matches3.csv")
+import pandas as pd
+def get_matches():
+     n = 2100
+     df = pd.read_csv("aew.csv",index_col="Index")
+     while n<=3100:
+         url = f"https://www.cagematch.net//?id=8&nr=2287&page=7&s={n}"
+         headers = {"Accept-Encoding": "deflate"}
+         soup = BeautifulSoup(requests.get(url, headers=headers).content, "html.parser")
 
-# # for seperating csv into sql friendly csv
-# df = pd.read_csv("matches3.csv",index_col="Index")
-# new = pd.read_csv("updated.csv")
-# for i in range(0,len(df.values)):
-#     print(i)
-#     match = df.iloc[i]["Fixture"].strip()
-#     participants = []
-#     for j in re.split(r'vs. |& |,',match):
-#         participants.append(str(j.strip()))
-#     if len(participants) <= 8:
-#          query = [match, df.iloc[i]["Date"].strip(), df.iloc[i]["Promotion"].strip(), df.iloc[i]["Match type"].strip(), df.iloc[i]["Event"].strip()]
-#          while len(participants) < 8:
-#              participants.append("n/a")
-#          for z in participants:
-#             query.append(z)
-#          print(query)
-#          new.loc[len(new)] = query
-# new.to_sql()
+         links = [
+             "https://www.cagematch.net/" + a["href"] for a in soup.select(".TCol a")
+        ]
+         matches = []
+         for u in links:
+             soup = BeautifulSoup(
+                 requests.get(u, headers=headers).content, "html.parser"
+             )
+             match = {}
+             for info in soup.select(".InformationBoxRow"):
+                 match[info.select_one(".InformationBoxTitle").text.strip()] = info.select_one(".InformationBoxContents").text.strip()
+             matches.append(match)
+             print(match)
+         for i in matches:
+             i["Event:"] = i["Event:"].split("(")[0]
+             i["Date:"] = i["Date:"][3:5]+"/"+i["Date:"][0:2]+"/"+i["Date:"][6:10]
+         df = pd.concat([df,pd.DataFrame(matches)],ignore_index=True)
+         n+=100
+         df.to_csv("aew.csv")
+
+
+from sqlalchemy import create_engine
+
+def sql_freindly(csv):
+    conn = create_engine("sqlite:///instance/database.db")
+    df = pd.read_csv(csv,index_col="Index")
+    new = pd.read_csv("updated2.csv")
+    for i in range(0,len(df.values)):
+        match = df.iloc[i]["Fixture"].strip()
+        participants = []
+        for j in re.split(r'vs. |& |,',match):
+            participants.append(str(j.strip()))
+        if len(participants) <= 8:
+             query = [match, df.iloc[i]["Date"].strip(), df.iloc[i]["Promotion"].strip(), df.iloc[i]["Match type"].strip(), df.iloc[i]["Event"].strip()]
+             while len(participants) < 8:
+                 participants.append("n/a")
+             for z in participants:
+                query.append(z)
+             new.loc[len(new)] = query
+    new.to_sql(name="Matches",con=conn,if_exists='append',index=False)
+    conn.dispose()

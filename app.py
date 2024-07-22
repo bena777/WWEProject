@@ -69,7 +69,8 @@ from helper import get_recent_matches, get_user_distribution, make_user_distribu
 @app.route("/")
 def home():
     last_date = Matches.query.order_by(Matches.date.desc()).limit(1).all()[0].date
-    updates = get_recent_matches(last_date)
+    updates = get_recent_matches(last_date,[1,7,2287])
+    print(updates)
     all_matches = Matches.query.all()
     for i in updates:
         if (i[0] not in [m.match for m in all_matches]) or (not Matches.query.filter_by(match=i[0],date=i[1]).first()):
