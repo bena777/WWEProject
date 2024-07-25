@@ -37,4 +37,10 @@
         </tbody>
     </table>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded',function() {
+        var th = document.getElementById('ratings-data').getElementsByTagName('th')[0];
+        sorttable.innerSortFunction.apply(document.getElementById('ratings-data').getElementsByTagName('th')[0], []);
+    });
+</script>
 </html>

@@ -49,7 +49,7 @@ def get_recent_matches(date,nrs):
         return new_matches
 
 def get_user_distribution(id):
-    similar = {"Prince Devitt":"Finn Balor","Cody":"Cody Rhodes"}
+    similar = {"Prince Devitt":"Finn Balor","Cody":"Cody Rhodes","Io Shirai":"IYO SKY","Dean Ambrose":"Jon Moxley"}
     query_result = db.session.query(Ratings, Matches).\
         join(Matches, Ratings.match_index == Matches.id).\
         filter(Ratings.user_index == id).all()
@@ -68,9 +68,7 @@ def get_user_distribution(id):
     end = []
     for i in superstars_ratings.keys():
         if i in list(similar.keys()):
-            print(i)
             alias = i
-            print(superstars_ratings)
             superstars_ratings[similar[alias]] += superstars_ratings[i]
             superstars_count[similar[alias]] += superstars_count[i]
             end.append(i)
