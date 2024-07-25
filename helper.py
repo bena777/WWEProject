@@ -49,7 +49,7 @@ def get_recent_matches(date,nrs):
         return new_matches
 
 def get_user_distribution(id):
-
+    similar = {"Prince Devitt":"Finn Balor","Cody":"Cody Rhodes"}
     query_result = db.session.query(Ratings, Matches).\
         join(Matches, Ratings.match_index == Matches.id).\
         filter(Ratings.user_index == id).all()
@@ -65,6 +65,18 @@ def get_user_distribution(id):
             elif (par_value != "n/a") and (par_value is not None):
                 superstars_ratings[par_value] += Ratings.query.filter_by(user_index=id,match_index=i.id).first().rating
                 superstars_count[par_value]+=1
+    end = []
+    for i in superstars_ratings.keys():
+        if i in list(similar.keys()):
+            print(i)
+            alias = i
+            print(superstars_ratings)
+            superstars_ratings[similar[alias]] += superstars_ratings[i]
+            superstars_count[similar[alias]] += superstars_count[i]
+            end.append(i)
+    for j in end:
+        del superstars_ratings[j]
+        del superstars_count[j]
     return {x:[superstars_count[x],superstars_ratings[x]] for x in list(superstars_ratings.keys())} #first number in list is count of matches, second is accumlation of all ratings. x[1] / x[0] = average rating
 
 
