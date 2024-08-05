@@ -141,6 +141,9 @@ def input_new_match():
         if int(match.match_index) not in [x.match_index for x in Ratings.query.filter_by(user_index=session["id"]).all()]:
             db.session.add(match)
             db.session.commit()
+        else:
+            print("Sorry, match is already inputted")
+            return render_template("input.html",again=True)
         q = [x for x in Ratings.query.filter_by(user_index=user.id)]
         matches = []
         for i in q:

@@ -94,6 +94,7 @@ def make_user_distribution_pie(data, id):
     # Enhance aesthetics
     ax.axis('equal')
     ax.set_title('User Distribution and Average Ratings')
+    ax.boxes()
     plt.savefig(f"static/plots/plot_{id}.png", bbox_inches='tight')
 
 # make a distribution that shows histogram of how ALL matches are ranked
@@ -103,7 +104,8 @@ def make_user_distribution_hist(id):
     plt.xlabel("Rating")
     plt.ylabel("# of Times")
     plt.title("Rating Distribution")
-    plt.hist(ratings, bins=20, color='#86bf91')
+    plt.xticks([1,2,3,4,5,6,7,8,9,10])
+    plt.hist(ratings, bins=10, color='#86bf91',edgecolor="black")
     plt.savefig(f"static/plots/plot_{id}")
 
 
