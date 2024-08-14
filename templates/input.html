@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input New Match</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='input.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <header>
+        <h1>Input New Match</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('user_home') }}">Home</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% if again %}
+        <h2> Sorry, that match has already been inputted. Please edit it on homepage to change it.</h2>
+        {% endif %}
+    <form action="{{ url_for('input_new_match') }}" method="post">
+        <label for="match_name">Search for Match:</label>
+        <input type="text" id="match_name" name="match_name" required>
+        <input type="hidden" id="selected_match_id" name="selected_match_id">
+        <br>
+        <div id="match-suggestions" class="match-suggestions" style="max-height: 200px; overflow-y: scroll;"></div>
+        <br>
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" name="rating" min="1" max="10" required>
+        <button type="submit">Submit Match</button>
+    </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ben Adelman. All rights reserved.</p>
+    </footer>
+</body>
+<script>
+    // Function to fetch and display match suggestions
+function displayMatchSuggestions(input) {
+    var suggestionsDiv = document.getElementById("match-suggestions");
+    suggestionsDiv.innerHTML = "";
+    fetch("/get_matches?input=" + input)
+        .then(response => response.json())
+        .then(data => {
+            // Sort data array in reverse chronological order based on date
+            data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            data.forEach(function(match) {
+                var p = document.createElement("p");
+                p.textContent = match.name + ' (' + match.event + ', ' + match.date + ')';
+                p.dataset.matchId = match.id; // Store match ID in dataset
+                p.classList.add("match-suggestion");
+                suggestionsDiv.appendChild(p);
+            });
+        });
+}
+
+
+    // Event listener for input changes
+    document.getElementById("match_name").addEventListener("input", function() {
+        var input = this.value;
+        if (input.length > 0) {
+            displayMatchSuggestions(input);
+        } else {
+            document.getElementById("match-suggestions").innerHTML = "";
+        }
+    });
+
+    // Event listener for selecting a match suggestion
+    document.addEventListener("click", function(event) {
+        if (event.target.classList.contains("match-suggestion")) {
+            document.getElementById("match_name").value = event.target.textContent.split(' (')[0];
+            // Set the selected match ID in the hidden input field
+            document.getElementById("selected_match_id").value = event.target.dataset.matchId;
+            document.getElementById("match_name").readOnly = false;
+            document.getElementById("match-suggestions").innerHTML = "";
+        }
+    });
+
+    function resetInputs(){
+        document.getElementById("match_name").value = "";
+        document.getElementById("selected_match_id").value = "";
+        document.getElementById("match-suggestions").innerHTML = "";
+    }
+    window.addEventListener("load",resetInputs);
+
+</script>
+</html>

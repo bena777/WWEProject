@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WrestleRate</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>WrestleRate</h1>
+            <ul>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><button onclick="window.location.href='{{ url_for('login') }}'" class="login-btn">Login</button></li>
+                <li><button onclick="window.location.href='{{ url_for('register') }}'" class="register-btn">Register</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Recent Matches</h2>
+            <table id="data" class="sortable">
+                <thead>
+                    <tr>
+                        <th>Match</th>
+                        <th>Date</th>
+                        <th>Event</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in matches %}
+                    <tr>
+                        <td>{{ i['Fixture:'] }}</td>
+                        <td>{{ i['Date:'] }}</td>
+                        <td>{{ i['Event:'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ben Adelman. All rights reserved.</p>
+    </footer>
+</body>
+</html>

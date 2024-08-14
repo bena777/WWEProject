@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_home.css') }}">
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <header>
+        <h1 id="username_welcome">Welcome back, {{ username }}</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <button class="input-btn" onclick="location.href='{{ url_for('input_new_match') }}'">Input New Match</button>
+        <h2>Your Ranked Matches</h2>
+        <section id="previous-matches">
+            <table id="match-data" class="sortable">
+                <thead>
+                    <tr>
+                        <th>Promotion</th>
+                        <th>Match</th>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Rating</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i, j in matches %}
+                    <tr>
+                        <td>{{ i.promotion }}</td>
+                        <td>{{ i.match }}</td>
+                        <td>{{ i.event }}</td>
+                        <td>{{ i.date }}</td>
+                        <td class="rating-column">{{ j.rating }}</td>
+                        <td class="delete-button"><button onclick="deleteMatch({{ i.id }})">❌</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        <section id="data-distribution">
+            <button class="dist-btn" onclick="location.href='{{ url_for('view_dist') }}'">See By Superstar</button>
+
+            <h2>Summary Statistics</h2>
+            <h3>Mean: {{ mean.__round__(2) }}</h3>
+            <h3>Median: {{ median }}</h3>
+            <h3>Total: {{ total_matches }}</h3>
+            <h3>Standard Deviation: {{ std.__round__(2) }}</h3>
+        </section>
+        <section id="graph">
+            <img class="histogram" src="{{ url_for('static', filename='plots/plot_' + id + '.png') }}" alt="Histogram Plot">
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ben Adelman. All rights reserved.</p>
+    </footer>
+    <script>
+    function deleteMatch(match_id) {
+        fetch(`/delete_match/${match_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Match deleted successfully');
+                location.reload();
+            } else {
+                console.error('Failed to delete match');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    </script>
+</body>
+</html>

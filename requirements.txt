@@ -1,0 +1,9 @@
+Flask==2.2.3
+werkzeug==2.2.3
+flask_sqlalchemy
+flask_login
+flask_wtf
+wtforms
+flask_bcrypt
+matplotlib
+

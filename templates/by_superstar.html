@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+    <link rel="stylesheet" href="static/by_superstar.css">
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('user_home') }}">Home</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <table id="ratings-data" class="sortable">
+        <thead>
+            <tr>
+                <th>Superstar</th>
+                <th>Avg Rating</th>
+                <th># of Matches</th>
+                <th>% of Matches</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in dist %}
+            <tr>
+                <td>{{ i }}</td>
+                <td>{{ (dist[i][1] / dist[i][0]).__round__(3) }}</td>
+                <td>{{ dist[i][0] }}</td>
+                <td>{{ ((dist[i][0] / total).__round__(4))*100 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

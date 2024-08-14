@@ -1,0 +1,136 @@
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+h3{
+    font-size: 32px;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f7f9fc;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin-left: 0px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+}
+
+main {
+    padding: 20px;
+    flex: 1;
+}
+
+h2 {
+    font-size: 22px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.rating-column {
+    font-size: 16px;
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+#previous-matches {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.histogram {
+    width: 100%;
+    max-width: 500px;
+    height: 300px;
+    margin: 20px auto;
+    position: absolute;
+    top: 725px;
+    left: 450px;
+    display: block;
+}
+
+.input-btn, .dist-btn, .see-all {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0; /* Adjust margin for vertical spacing */
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.input-btn:hover, .dist-btn:hover, .see-all:hover {
+    background: linear-gradient(45deg, #2980b9, #3498db);
+    transform: scale(1.05);
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
