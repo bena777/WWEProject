@@ -29,9 +29,9 @@
             {% for i in dist %}
             <tr>
                 <td>{{ i }}</td>
-                <td>{{ (dist[i][1] / dist[i][0]).__round__(3) }}</td>
+                <td>{{ (dist[i][1] / dist[i][0]).__round__(2) }}</td>
                 <td>{{ dist[i][0] }}</td>
-                <td>{{ ((dist[i][0] / total).__round__(4))*100 }}</td>
+                <td>{{ ((dist[i][0] / total)*100).__round__(2) }}</td>
             </tr>
             {% endfor %}
         </tbody>
