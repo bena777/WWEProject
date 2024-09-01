@@ -6,4 +6,5 @@ flask_wtf
 wtforms
 flask_bcrypt
 matplotlib
+gunicorn
 
