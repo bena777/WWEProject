@@ -8,4 +8,4 @@ flask_bcrypt
 matplotlib
 gunicorn
 requests
-
+bs4
