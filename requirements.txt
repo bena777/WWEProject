@@ -7,4 +7,5 @@ wtforms
 flask_bcrypt
 matplotlib
 gunicorn
+requests
 
