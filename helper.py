@@ -39,9 +39,9 @@ def get_recent_matches(date,nrs):
                 participants = []
                 for x in re.split(r'vs. |& |,',match):
                     participants.append(str(x.strip()))
-                if len(participants) <= 8:
+                if len(participants) <= 10:
                     query = [match, j["Date:"].strip(), j["Promotion:"].strip(),j["Match type:"].strip(), j["Event:"].strip()]
-                    while len(participants) < 8:
+                    while len(participants) < 10:
                         participants.append("n/a")
                     for z in participants:
                         query.append(z)
